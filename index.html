@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KU Calculus AI Tutor Portal - ระบบติวเตอร์แคลคูลัสอัจฉริยะ มหาวิทยาลัยเกษตรศาสตร์</title>
+  <title>Calculus AI Tutor Portal - ระบบเตรียมความพร้อมแคลคูลัสอัจฉริยะ</title>
   
   <!-- SEO Meta Tags -->
-  <meta name="description" content="พอร์ทัลนิสิตระบบติวเตอร์แคลคูลัสอัจฉริยะ (Calculus AI Tutor) สำหรับเรียนรู้ ตรวจสอบกระดาษทด และคำนวณคะแนนด้วย AI แบบเรียลไทม์ โครงการความร่วมมือแบ่งปันต้นทุนพลังงานสมองประดิษฐ์">
-  <meta name="author" content="KU Faculty of Engineering / AI Tutor Project">
+  <meta name="description" content="พอร์ทัลเตรียมความพร้อมระบบติวเตอร์แคลคูลัสอัจฉริยะ (Calculus AI Tutor) สำหรับเรียนรู้ ตรวจสอบกระดาษทด และคำนวณคะแนนด้วย AI แบบเรียลไทม์ โครงการความร่วมมือแบ่งปันต้นทุนพลังงานสมองประดิษฐ์">
+  <meta name="author" content="CalTutor AI Project">
 
   <!-- Google Fonts: Inter & Sarabun for Premium Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,27 +17,26 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind Config Customizations for Academic Theme & Micro-animations -->
+  <!-- Tailwind Config Customizations for Academic/EdTech Theme & Micro-animations -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            ku: {
-              dark: '#071811',      /* Deep Forest Dark Background */
-              deep: '#0a2618',      /* Panel Background */
-              green: '#006633',     /* KU Green Brand Color */
-              primary: '#00a859',   /* Bright Emerald Green */
-              accent: '#34d399',    /* Teal Accent */
-              navy: '#0f172a',      /* Slate Navy */
+            brand: {
+              dark: '#0b0f19',      /* Deep Indigo Slate Dark Background */
+              deep: '#0f172a',      /* Panel Slate Background */
+              primary: '#6366f1',   /* Premium Indigo */
+              accent: '#8b5cf6',    /* Violet Accent */
+              teal: '#14b8a6',      /* Teal secondary */
             }
           },
           fontFamily: {
             sans: ['Inter', 'Sarabun', 'sans-serif'],
           },
           boxShadow: {
-            'glow-emerald': '0 0 20px rgba(16, 185, 129, 0.15)',
-            'glow-emerald-lg': '0 0 35px rgba(16, 185, 129, 0.3)',
+            'glow-indigo': '0 0 20px rgba(99, 102, 241, 0.15)',
+            'glow-indigo-lg': '0 0 35px rgba(99, 102, 241, 0.3)',
           }
         }
       }
@@ -48,7 +47,7 @@
   <style>
     /* CSS Custom variables & Utilities */
     body {
-      background: radial-gradient(circle at 50% 0%, #0a2e1d 0%, #06110b 60%);
+      background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #09090b 60%);
       font-family: 'Inter', 'Sarabun', sans-serif;
       min-height: 100vh;
       color: #e2e8f0;
@@ -60,7 +59,7 @@
       position: absolute;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(0, 168, 89, 0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
       top: -100px;
       left: -100px;
       filter: blur(80px);
@@ -72,7 +71,7 @@
       position: absolute;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 75%);
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 75%);
       bottom: -100px;
       right: -100px;
       filter: blur(100px);
@@ -103,13 +102,13 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Coze Chat Container Custom styling to fit academic UI */
+    /* Coze Chat Container Custom styling to fit UI */
     #coze-chat-container {
       height: 600px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 1rem;
       overflow: hidden;
-      background: rgba(10, 24, 18, 0.7);
+      background: rgba(15, 23, 42, 0.7);
       backdrop-filter: blur(12px);
     }
   </style>
@@ -121,31 +120,31 @@
   <div class="bg-mesh-2"></div>
 
   <!-- Header Section -->
-  <header class="border-b border-white/5 bg-ku-dark/80 backdrop-blur-md sticky top-0 z-40">
+  <header class="border-b border-white/5 bg-brand-dark/80 backdrop-blur-md sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <!-- Academic Emblem Placeholder Icon -->
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ku-green to-ku-primary flex items-center justify-center text-white font-bold text-lg shadow-glow-emerald">
-          KU
+        <!-- Integral Symbol Emblem Icon representing Calculus -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-primary to-brand-accent flex items-center justify-center text-white font-bold text-xl shadow-glow-indigo">
+          &int;
         </div>
         <div>
           <h1 class="text-md sm:text-lg font-bold text-white leading-tight flex items-center gap-2">
-            Calculus <span class="bg-gradient-to-r from-ku-primary to-ku-accent bg-clip-text text-transparent">AI Tutor</span>
+            Calculus <span class="bg-gradient-to-r from-brand-primary to-brand-accent bg-clip-text text-transparent">AI Tutor</span>
           </h1>
-          <p class="text-xs text-emerald-500/80 font-medium tracking-wide">มหาวิทยาลัยเกษตรศาสตร์</p>
+          <p class="text-xs text-indigo-400/80 font-medium tracking-wide">สถาบันกวดวิชาและเตรียมความพร้อมคณิตศาสตร์อิสระ</p>
         </div>
       </div>
 
       <div class="flex items-center gap-3">
         <!-- Status Indicator -->
-        <div class="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
-          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span id="system-status" class="text-xs text-emerald-400 font-medium">Online</span>
+        <div class="hidden sm:flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+          <span id="system-status" class="text-xs text-indigo-400 font-medium">Online</span>
         </div>
         
         <!-- User Info Action (Hidden until Login) -->
         <div id="header-user" class="hidden flex items-center gap-2">
-          <span id="user-avatar" class="w-8 h-8 rounded-full bg-ku-accent/20 border border-ku-accent/30 text-ku-accent flex items-center justify-center text-xs font-bold font-mono">KU</span>
+          <span id="user-avatar" class="w-8 h-8 rounded-full bg-brand-accent/20 border border-brand-accent/30 text-brand-accent flex items-center justify-center text-xs font-bold font-mono">ST</span>
           <button onclick="logout()" class="text-xs text-slate-400 hover:text-red-400 transition-colors py-1 px-2 rounded-lg hover:bg-white/5">
             ออกจากระบบ
           </button>
@@ -162,63 +161,81 @@
       
       <!-- Premium Hero Presentation -->
       <div class="text-center space-y-3">
-        <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-500/10 rounded-full border border-emerald-500/20">
-          Calculus I & II Co-Learning Portal
+        <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-indigo-300 bg-indigo-500/10 rounded-full border border-indigo-500/20">
+          Calculus High School Prep Portal
         </span>
         <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-snug">
-          ระบบติวเตอร์ AI <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">แคลคูลัสอัจฉริยะ</span>
+          ระบบติวเตอร์ AI <span class="bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400 bg-clip-text text-transparent">แคลคูลัสระดับมัธยมปลาย</span>
         </h2>
         <p class="text-slate-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
-          พัฒนาขึ้นเพื่อนิสิตวิศวกรรมศาสตร์และวิทยาศาสตร์ เรียนรู้ได้ยืดหยุ่น ตรวจวิธีทำละเอียด 24 ชั่วโมง ภายใต้โครงการแชร์พลังงานสมองประดิษฐ์
+          เตรียมความพร้อมและฝึกฝนวิชาแคลคูลัสสำหรับนักเรียนมัธยมปลาย เรียนรู้ได้ยืดหยุ่น ตรวจวิธีทำละเอียด 24 ชั่วโมง ภายใต้ระบบจำลองแบ่งปันต้นทุน
         </p>
       </div>
 
       <!-- Login Card Container -->
-      <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-glow-emerald shimmer-card relative">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-glow-indigo shimmer-card relative">
         <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-indigo-400">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
           </svg>
-          เข้าสู่ระบบสำหรับนิสิต
+          เข้าสู่ระบบสำหรับนักเรียน
         </h3>
 
         <!-- Form for Login -->
-        <div class="space-y-5">
+        <div class="space-y-4">
+          <!-- Email Input -->
           <div>
-            <label for="student-id" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-              รหัสนิสิต (10 หลัก เช่น 6510401234)
+            <label for="student-email" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              ที่อยู่อีเมล (Email Address)
             </label>
             <div class="relative">
               <input 
-                type="text" 
-                id="student-id" 
-                maxlength="10" 
-                placeholder="ป้อนรหัสนิสิตของคุณ" 
-                class="w-full bg-slate-950/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 font-mono tracking-widest text-lg transition-all-300"
-                onkeyup="validateStudentIdInput(this.value)"
+                type="email" 
+                id="student-email" 
+                placeholder="example@email.com" 
+                class="w-full bg-slate-950/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all-300"
+                onkeyup="validateInputs()"
               >
               <div class="absolute right-3 top-3.5 flex items-center">
                 <!-- Valid Checkmark Indicator -->
-                <span id="validation-check" class="hidden text-emerald-400">
+                <span id="email-validation-check" class="hidden text-indigo-400">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.748-5.25z" clip-rule="evenodd" />
                   </svg>
                 </span>
               </div>
             </div>
-            <p id="auth-error-msg" class="text-xs text-rose-400 mt-2 hidden">
-              * รหัสนิสิตต้องเป็นตัวเลข 10 หลักเท่านั้น
+            <p id="email-error-msg" class="text-xs text-rose-400 mt-2 hidden">
+              * รูปแบบที่อยู่อีเมลไม่ถูกต้อง
             </p>
           </div>
 
+          <!-- Password Input -->
+          <div>
+            <label for="student-password" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              รหัสผ่าน (Password)
+            </label>
+            <input 
+              type="password" 
+              id="student-password" 
+              placeholder="ป้อนรหัสผ่านของคุณ (อย่างน้อย 6 ตัวอักษร)" 
+              class="w-full bg-slate-950/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all-300"
+              onkeyup="validateInputs()"
+            >
+            <p id="password-error-msg" class="text-xs text-rose-400 mt-2 hidden">
+              * รหัสผ่านต้องมีความยาวไม่น้อยกว่า 6 ตัวอักษร
+            </p>
+          </div>
+
+          <!-- Login Button -->
           <button 
             id="login-btn" 
             onclick="handleLogin()" 
             disabled
-            class="w-full bg-emerald-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300"
+            class="w-full bg-indigo-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300"
           >
             <span>เข้าสู่ระบบติวเตอร์</span>
-            <!-- Spinner (Hidden by default) -->
+            <!-- Spinner -->
             <svg id="login-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -229,11 +246,11 @@
         <!-- Footnote inside Card -->
         <div class="mt-6 pt-6 border-t border-white/5 flex flex-col gap-2">
           <div class="flex gap-2.5 items-start">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-indigo-500 mt-0.5 shrink-0">
               <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063 1.063L12 13.5h-1.5V16.5h3M21.75 12a9.75 9.75 0 11-19.5 0 9.75 9.75 0 0119.5 0z" />
             </svg>
-            <p class="text-[11px] text-slate-500 leading-normal font-sans">
-              <strong>ระบบแบ่งปันต้นทุน (Cost-Sharing Model):</strong> ค่าทรัพยากรการประมวลผลของโมเดล AI (API Token) ถูกจัดสรรตามการสนับสนุนจริง นิสิตเริ่มต้นจะได้รับเครดิตทดลองฟรีประจำสัปดาห์
+            <p class="text-[11px] text-slate-500 leading-normal">
+              <strong>ระบบแบ่งปันต้นทุน (Cost-Sharing Model):</strong> ค่าทรัพยากรการประมวลผลของโมเดล AI (API Token) ถูกจัดสรรตามการสนับสนุนจริง นักเรียนที่สมัครใช้งานจะได้รับเครดิตเริ่มต้นเพื่อทดลองระบบฟรี
             </p>
           </div>
         </div>
@@ -247,17 +264,17 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/50 border border-white/5 rounded-2xl p-6 backdrop-blur-lg">
         <div>
           <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
-            ยินดีต้อนรับ, <span id="student-name-display" class="text-emerald-400">นิสิต</span>
+            ยินดีต้อนรับ, <span id="student-name-display" class="text-indigo-400">นักเรียน</span>
           </h2>
           <p class="text-xs sm:text-sm text-slate-400 mt-1">
-            ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเกษตรศาสตร์ | รหัสนิสิต: <span id="student-id-display" class="font-mono text-emerald-400/90 font-medium">65xxxxxxxx</span>
+            หลักสูตรเตรียมความพร้อมแคลคูลัสสำหรับมัธยมปลาย | บัญชีผู้ใช้: <span id="student-email-display" class="font-mono text-indigo-400/90 font-medium">example@email.com</span>
           </p>
         </div>
         
         <!-- Cohort / Course Banner badge -->
-        <div class="self-start md:self-center flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-          <span class="text-xs font-semibold text-emerald-300 font-mono">CALCULUS I (01204111)</span>
+        <div class="self-start md:self-center flex items-center gap-2 bg-indigo-950/40 border border-indigo-500/20 px-3 py-1.5 rounded-xl">
+          <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
+          <span class="text-xs font-semibold text-indigo-300 font-mono">HIGH SCHOOL CALC PREP</span>
         </div>
       </div>
 
@@ -265,16 +282,16 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <!-- WALLET CARD (1 Column) -->
-        <article class="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-glow-emerald relative overflow-hidden group">
-          <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all-300"></div>
+        <article class="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-glow-indigo relative overflow-hidden group">
+          <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl group-hover:bg-indigo-500/20 transition-all-300"></div>
           
           <div>
             <div class="flex items-center justify-between mb-4">
               <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                กระเป๋าเงินนิสิต (Student Wallet)
+                กระเป๋าเงินนักเรียน (Student Wallet)
               </h3>
               <!-- Credit icon -->
-              <span class="text-emerald-400 bg-emerald-400/10 p-1.5 rounded-lg">
+              <span class="text-indigo-400 bg-indigo-400/10 p-1.5 rounded-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
@@ -286,7 +303,7 @@
               <p class="text-xs text-slate-500">เครดิตคงเหลือใช้งาน</p>
               <div class="flex items-baseline gap-2 mt-1">
                 <span id="credit-balance" class="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">0</span>
-                <span class="text-sm text-emerald-400 font-bold">เครดิต</span>
+                <span class="text-sm text-indigo-400 font-bold">เครดิต</span>
               </div>
             </div>
           </div>
@@ -295,7 +312,7 @@
           <div class="mt-6 pt-4 border-t border-white/5">
             <button 
               onclick="openSupportModal()"
-              class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 border border-emerald-500/20 hover:border-emerald-500/40 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all-300"
+              class="w-full bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 hover:text-indigo-300 border border-indigo-500/20 hover:border-indigo-500/40 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all-300"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -312,20 +329,20 @@
           <button 
             onclick="activateCozeChat()" 
             id="btn-action-chat"
-            class="bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer"
+            class="bg-white/5 hover:bg-indigo-950/20 border border-white/5 hover:border-indigo-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-indigo cursor-pointer"
           >
             <div class="space-y-3">
-              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
                 </svg>
               </div>
-              <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">เริ่มแชทกับติวเตอร์</h3>
+              <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">เริ่มแชทกับติวเตอร์</h3>
               <p class="text-xs text-slate-400 leading-normal">
-                ถามการบ้านแคลคูลัส สอบถามสูตร ปรึกษาทฤษฎีบท หรือแก้ปัญหาโจทย์ดิฟ-อินทิเกรตแบบมีภาพประกอบกับติวเตอร์ AI
+                ถามปัญหาแคลคูลัส สอบถามสูตร ปรึกษาทฤษฎีบท หรือแก้ปัญหาโจทย์ดิฟ-อินทิเกรตแบบมีภาพประกอบกับติวเตอร์ AI
               </p>
             </div>
-            <span class="text-xs font-semibold text-emerald-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            <span class="text-xs font-semibold text-indigo-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
               เปิดหน้าต่างแชทติวเตอร์ &rarr;
             </span>
           </button>
@@ -361,7 +378,7 @@
       <div id="coze-chat-wrapper" class="hidden transition-all-300 space-y-3">
         <div class="flex items-center justify-between">
           <span class="text-sm font-bold text-slate-300 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
             Coze AI Calculus Tutor Simulator
           </span>
           <button onclick="closeCozeChat()" class="text-xs text-rose-400 hover:underline">
@@ -378,10 +395,10 @@
               
               <!-- System / Welcome Msg -->
               <div class="flex gap-2">
-                <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+                <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 font-bold">AI</div>
                 <div class="bg-slate-900 border border-white/5 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-300">
-                  <p class="font-bold text-emerald-400 mb-1"> Calculus Tutor Bot v1.5 </p>
-                  สวัสดีครับนิสิต! ยินดีต้อนรับสู่ติวเตอร์ส่วนตัว ยินดีต้อนรับสู่วิชาแคลคูลัส มีโจทย์ข้อไหนที่ไม่เข้าใจหรืออยากให้ช่วยอธิบาย หรือต้องการรูปวาดแสดงพื้นที่กราฟ บอกมาได้เลยครับ!
+                  <p class="font-bold text-indigo-400 mb-1"> Calculus Tutor Bot v1.5 </p>
+                  สวัสดีนักเรียนทุกคน! ยินดีต้อนรับสู่ติวเตอร์เตรียมความพร้อมแคลคูลัสส่วนตัว มีโจทย์ข้อไหนที่ไม่เข้าใจหรืออยากให้ช่วยอธิบาย หรือต้องการรูปวาดแสดงพื้นที่ใต้กราฟ บอกครูมาได้เลยครับ!
                 </div>
               </div>
               
@@ -393,12 +410,12 @@
                 type="text" 
                 id="mock-chat-input"
                 placeholder="พิมพ์ถามคำถามแคลคูลัส (เช่น ช่วยอธิบายกฎลูกโซ่ Chain Rule)" 
-                class="flex-grow bg-slate-950/60 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm"
+                class="flex-grow bg-slate-950/60 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
                 onkeypress="if(event.key === 'Enter') sendMockMessage()"
               >
               <button 
                 onclick="sendMockMessage()"
-                class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 rounded-xl text-sm transition-all-300"
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 rounded-xl text-sm transition-all-300"
               >
                 ส่ง
               </button>
@@ -550,7 +567,7 @@
                   
                   <div class="mt-2 bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/10 text-xs text-rose-300 space-y-1">
                     <p class="font-bold">&times; ตรวจพบข้อผิดพลาดด้านการคำนวณ (Calculation Error):</p>
-                    <p>นิสิตประเมินค่าฟังก์ชันตรีโกณมิติ \( \sin(\pi) \) คลาดเคลื่อน โดยระบุเป็น \( 1 \)</p>
+                    <p>นักเรียนประเมินค่าฟังก์ชันตรีโกณมิติ \( \sin(\pi) \) คลาดเคลื่อน โดยระบุเป็น \( 1 \)</p>
                     <p class="text-[11px] text-slate-400 italic">ความจริง: ค่าที่ถูกต้องของ \( \sin(\pi) = 0 \)</p>
                   </div>
                 </div>
@@ -561,7 +578,7 @@
                 <span class="w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 font-bold">💡</span>
                 <div>
                   <p class="font-bold text-blue-400">ข้อแนะนำเพิ่มเติมจาก AI Tutor:</p>
-                  <p class="text-slate-400 mt-1">คำตอบสุดท้ายที่ถูกต้องคือ \( -\pi^2 \) (หรือประมาณ -9.87) นิสิตระมัดระวังเรื่องค่าวงกลมหนึ่งหน่วยตอนแทนค่ามุมตรีโกณมิติ การใช้สูตรแคลคูลัสหลัก ๆ ถูกต้องสมบูรณ์ดีมากแล้วครับ!</p>
+                  <p class="text-slate-400 mt-1">คำตอบสุดท้ายที่ถูกต้องคือ \( -\pi^2 \) (หรือประมาณ -9.87) นักเรียนระมัดระวังเรื่องค่าวงกลมหนึ่งหน่วยตอนแทนค่ามุมตรีโกณมิติ การใช้สูตรแคลคูลัสหลัก ๆ ถูกต้องสมบูรณ์ดีมากแล้วครับ!</p>
                 </div>
               </div>
             </div>
@@ -579,10 +596,10 @@
     <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeSupportModal()"></div>
     
     <!-- Modal Card Content -->
-    <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg p-6 relative z-10 shadow-glow-emerald-lg scale-95 transition-transform duration-300" id="support-modal-content">
+    <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg p-6 relative z-10 shadow-glow-indigo-lg scale-95 transition-transform duration-300" id="support-modal-content">
       <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
         <h3 class="text-lg font-bold text-white flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-indigo-400">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           สนับสนุนค่าระบบ & เติมเครดิต
@@ -597,34 +614,34 @@
       <!-- Cost Sharing Model Explanation -->
       <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
         <p>
-          ระบบ <strong>Calculus AI Tutor</strong> เปิดให้ใช้งานภายใต้โครงสร้างการทำงานแบบ <strong>Cost-Sharing (การแบ่งปันต้นทุนร่วมกัน)</strong> สำหรับนิสิตผู้เข้าใช้หลายรุ่นต่อเนื่อง
+          ระบบ <strong>Calculus AI Tutor</strong> เปิดให้ใช้งานภายใต้โครงสร้างการทำงานแบบ <strong>Cost-Sharing (การแบ่งปันต้นทุนร่วมกัน)</strong> สำหรับผู้เรียนเพื่อรักษาบริการต่อเนื่องระยะยาว
         </p>
         
         <div class="bg-slate-950 p-4 rounded-xl border border-white/5 space-y-2.5">
-          <h4 class="font-bold text-emerald-400 text-xs uppercase tracking-wider">ทำไมจึงมีระบบเครดิต?</h4>
+          <h4 class="font-bold text-indigo-400 text-xs uppercase tracking-wider">ทำไมจึงมีระบบเครดิต?</h4>
           <p class="text-[11px] text-slate-400">
-            การถามตอบด้วย AI และตรวจการบ้านอย่างละเอียด ใช้ทรัพยากรการประมวลผลสูง (Large Language Models API) ซึ่งมีค่าบริการเป็นจำนวน Token เพื่อรักษาความเป็นกลางและให้บริการต่อเนื่องระยะยาว ระบบจึงจำเป็นต้องจัดสรรทรัพยากรอย่างโปร่งใส
+            การถามตอบด้วย AI และตรวจการบ้านอย่างละเอียด ใช้ทรัพยากรการประมวลผลสูง (Large Language Models API) ซึ่งมีค่าบริการจริงในการรับส่ง Token เพื่อความยั่งยืนของโครงการระบบจึงจัดสรรแบบเครดิตตามความคุ้มค่าจริง
           </p>
         </div>
 
         <div class="space-y-2">
           <h4 class="font-bold text-white">วิธีการได้รับเครดิต/สนับสนุนโครงการ:</h4>
           <ul class="list-disc pl-5 space-y-1 text-slate-400 text-xs">
-            <li><strong>เครดิตฟรีประจำสัปดาห์:</strong> มหาวิทยาลัยจัดสรรให้ฟรีท่านละ 100 เครดิตทุกวันจันทร์</li>
-            <li><strong>สนับสนุนรายวิชา (Co-payment):</strong> บริจาคเข้าทุนพัฒนาคณะเพื่อแลกรับเครดิตเพิ่มเติม</li>
-            <li><strong>โครงการส่งเสริมนิสิตช่วยสอน (TA Support):</strong> แลกคะแนนจากการตอบปัญหาให้เพื่อนในห้องเรียน</li>
+            <li><strong>เครดิตทดลองฟรี:</strong> ผู้สมัครใหม่รับทันที 100 เครดิตสำหรับเริ่มต้นฝึกฝน</li>
+            <li><strong>ร่วมบริจาคสนับสนุนโครงการ:</strong> เติมเครดิตผ่านกองทุนบำรุงเซิร์ฟเวอร์ระบบการเรียนรู้</li>
+            <li><strong>โครงการช่วยเหลือ TA:</strong> ช่วยแนะแนววิธีทำของเพื่อนในเว็บบอร์ดตอบคำถามเพื่อรับรางวัลเครดิตสะสม</li>
           </ul>
         </div>
 
         <!-- Simulated QR Payment for Demo -->
-        <div class="bg-emerald-950/20 border border-emerald-500/20 p-4 rounded-xl flex items-center justify-between gap-4 mt-2">
+        <div class="bg-indigo-950/20 border border-indigo-500/20 p-4 rounded-xl flex items-center justify-between gap-4 mt-2">
           <div class="space-y-1">
-            <p class="text-xs font-bold text-emerald-300">จำลองการเติมเครดิตด่วน</p>
+            <p class="text-xs font-bold text-indigo-300">จำลองการเติมเครดิตด่วน</p>
             <p class="text-[11px] text-slate-400">เพิ่ม 100 เครดิต สำหรับจำลองการทำงานของแอปพลิเคชัน</p>
           </div>
           <button 
             onclick="addMockCredits(100)" 
-            class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg text-xs whitespace-nowrap transition-all-300"
+            class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded-lg text-xs whitespace-nowrap transition-all-300"
           >
             +100 เครดิต (ทดสอบ)
           </button>
@@ -640,11 +657,17 @@
   </div>
 
   <!-- Footer Section -->
-  <footer class="border-t border-white/5 py-6 bg-ku-dark text-slate-500 text-xs mt-12">
+  <footer class="border-t border-white/5 py-6 bg-brand-dark text-slate-500 text-xs mt-12">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
       <div class="text-center md:text-left">
-        <p>&copy; 2026 Calculus AI Tutor. คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเกษตรศาสตร์</p>
-        <p class="text-[10px] text-slate-600 mt-1">ขับเคลื่อนด้วยระบบตรวจหาลายมือและ Coze Web SDK. ออกแบบเพื่อการจัดสรรทรัพยากรการศึกษาอย่างยั่งยืน</p>
+        <p>&copy; 2026 Calculus AI Tutor. โครงการติวเตอร์อิสระระดับมัธยมปลาย</p>
+        <p class="text-[10px] text-slate-600 mt-1">
+          ขับเคลื่อนด้วยระบบตรวจหาลายมือและ Coze Web SDK. ออกแบบเพื่อการจัดสรรทรัพยากรการศึกษาอย่างยั่งยืน
+        </p>
+        <!-- Required Footer Disclaimer -->
+        <p class="text-[10px] text-amber-500/70 font-medium mt-1">
+          * แพลตฟอร์มนี้เป็นระบบติวเตอร์อิสระสำหรับการเตรียมความพร้อม ไม่ได้เป็นส่วนหนึ่งของมหาวิทยาลัย
+        </p>
       </div>
       <div class="flex gap-4">
         <a href="#" class="hover:underline hover:text-slate-400">นโยบายความเป็นส่วนตัว</a>
@@ -655,23 +678,6 @@
   </footer>
 
 
-  <!-- =========================================================================
-       CRITICAL: EXCELLENT PLACEHOLDER FOR COZE CHAT SDK INJECTION
-       Developers can inject the script dynamically by replacing this section.
-       Example SDK usage:
-       <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-sdk/1.0.1/play.js"></script>
-       <script>
-         new CozeWebSDK.WebChat({
-           config: {
-             bot_id: 'YOUR_BOT_ID_HERE',
-           },
-           componentProps: {
-             title: 'KU Calculus AI Tutor',
-           },
-           el: document.getElementById('coze-chat-container'),
-         });
-       </script>
-       ========================================================================= -->
   <!-- COZE_CHAT_SDK_PLACEHOLDER_START -->
   <!-- <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-sdk/1.1.0-alpha.3/play.js"></script> -->
   <!-- COZE_CHAT_SDK_PLACEHOLDER_END -->
@@ -683,50 +689,51 @@
     let currentStudent = null;
 
     /**
-     * 1. FRONTEND VALIDATION
-     * Validates the input for Student ID (KU style: 10 digits).
-     * @param {string} val 
+     * 1. FRONTEND INPUT VALIDATION (Email & Password)
      */
-    function validateStudentIdInput(val) {
+    function validateInputs() {
+      const emailInput = document.getElementById('student-email');
+      const passwordInput = document.getElementById('student-password');
       const loginBtn = document.getElementById('login-btn');
-      const errorMsg = document.getElementById('auth-error-msg');
-      const checkIcon = document.getElementById('validation-check');
+      
+      const emailErr = document.getElementById('email-error-msg');
+      const passErr = document.getElementById('password-error-msg');
+      const checkIcon = document.getElementById('email-validation-check');
 
-      // Regular Expression: Accepts exactly 10 digits
-      const isDigitsOnly = /^\d{10}$/.test(val);
+      const emailVal = emailInput.value.trim();
+      const passVal = passwordInput.value;
 
-      if (val.length === 0) {
-        errorMsg.classList.add('hidden');
+      // RFC 5322 matching regular expression for Email verification
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const isEmailValid = emailRegex.test(emailVal);
+      const isPasswordValid = passVal.length >= 6;
+
+      // Email field visual response
+      if (emailVal.length === 0) {
+        emailErr.classList.add('hidden');
         checkIcon.classList.add('hidden');
-        loginBtn.disabled = true;
-        setButtonState(loginBtn, false);
-      } else if (!/^\d*$/.test(val)) {
-        // Contains letters or special chars
-        errorMsg.classList.remove('hidden');
+      } else if (!isEmailValid) {
+        emailErr.classList.remove('hidden');
         checkIcon.classList.add('hidden');
-        loginBtn.disabled = true;
-        setButtonState(loginBtn, false);
-      } else if (val.length === 10 && isDigitsOnly) {
-        // Correct 10-digit format
-        errorMsg.classList.add('hidden');
+      } else {
+        emailErr.classList.add('hidden');
         checkIcon.classList.remove('hidden');
-        loginBtn.disabled = false;
-        setButtonState(loginBtn, true);
-      } else {
-        // Digits but not 10 length yet
-        errorMsg.classList.add('hidden');
-        checkIcon.classList.add('hidden');
-        loginBtn.disabled = true;
-        setButtonState(loginBtn, false);
       }
-    }
 
-    // Toggle button style based on validity state
-    function setButtonState(btn, isActive) {
-      if (isActive) {
-        btn.className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-glow-emerald hover:-translate-y-0.5 transition-all-300";
+      // Password field visual response
+      if (passVal.length === 0 || isPasswordValid) {
+        passErr.classList.add('hidden');
       } else {
-        btn.className = "w-full bg-emerald-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300";
+        passErr.classList.remove('hidden');
+      }
+
+      // Toggle state of submit button
+      if (isEmailValid && isPasswordValid) {
+        loginBtn.disabled = false;
+        loginBtn.className = "w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-glow-indigo hover:-translate-y-0.5 transition-all-300";
+      } else {
+        loginBtn.disabled = true;
+        loginBtn.className = "w-full bg-indigo-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300";
       }
     }
 
@@ -735,37 +742,44 @@
      * Simulates fetching student details asynchronously from a server
      * (e.g. Google Apps Script Web App url).
      * 
-     * @param {string} studentId 
+     * @param {string} email 
+     * @param {string} password 
      * @returns {Promise<Object>}
      */
-    async function authenticateStudent(studentId) {
+    async function authenticateStudent(email, password) {
       // Keep this delay to simulate a real HTTP request overhead
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      // Mock database mapping Kasetsart Student IDs
+      // Mock database mapping emails and passwords
       const mockDatabase = {
-        "6510401111": { name: "นิสิต สมชาย ใจสู้", balance: 150 },
-        "6510402222": { name: "นิสิต สรวิชญ์ วิวัฒนกุล", balance: 80 },
-        "6510403333": { name: "นิสิต ณิชชา แก้วเจริญ", balance: 210 },
-        "6510405555": { name: "นิสิต อนันดา ทองดี", balance: 0 }
+        "somchai@email.com": { name: "สมชาย ใจสู้", balance: 150, password: "password123" },
+        "sorawit@email.com": { name: "สรวิชญ์ วิวัฒนกุล", balance: 80, password: "password123" },
+        "nichcha@email.com": { name: "ณิชชา แก้วเจริญ", balance: 210, password: "password123" }
       };
 
-      // Fallback for demo: Any valid 10-digit ID not in database receives default values
-      if (mockDatabase[studentId]) {
-        return {
-          success: true,
-          studentId: studentId,
-          name: mockDatabase[studentId].name,
-          balance: mockDatabase[studentId].balance,
-          cohort: "Kasetsart Engineer Cohort #86"
-        };
+      const normalizedEmail = email.toLowerCase().trim();
+
+      if (mockDatabase[normalizedEmail]) {
+        const user = mockDatabase[normalizedEmail];
+        if (user.password === password) {
+          return {
+            success: true,
+            email: normalizedEmail,
+            name: user.name,
+            balance: user.balance,
+            cohort: "High School Prep Cohort #1"
+          };
+        } else {
+          return { success: false, error: "รหัสผ่านไม่ถูกต้อง" };
+        }
       } else {
+        // Fallback for demo: Any valid format register automatically with 100 default credits
         return {
           success: true,
-          studentId: studentId,
-          name: "นิสิต ทั่วไป (ผู้ใช้ใหม่)",
-          balance: 100, // Default signup bonus credits
-          cohort: "Kasetsart Student Guest"
+          email: normalizedEmail,
+          name: "นักเรียนทั่วไป (ผู้ใช้ใหม่)",
+          balance: 100,
+          cohort: "High School Prep Guest"
         };
       }
 
@@ -776,12 +790,17 @@
          
          const webAppUrl = "https://script.google.com/macros/s/AKfycb.../exec";
          try {
-           const response = await fetch(`${webAppUrl}?action=login&studentId=${studentId}`);
+           const response = await fetch(webAppUrl, {
+             method: 'POST',
+             mode: 'cors',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ action: 'login', email: email, password: password })
+           });
            const data = await response.json();
-           return data; // Expected structure: { success: true, name: "...", balance: X }
+           return data; // Expected structure: { success: true, name: "...", balance: X } or { success: false, error: "..." }
          } catch (error) {
            console.error("Backend connection failed: ", error);
-           return { success: false, error: "ไม่สามารถเชื่อมต่อฐานข้อมูลภายนอกได้" };
+           return { success: false, error: "ไม่สามารถเชื่อมต่อฐานข้อมูลหลังบ้านได้" };
          }
          ======================================================================= */
     }
@@ -790,14 +809,16 @@
      * 3. AUTHENTICATION CONTROLLER
      */
     async function handleLogin() {
-      const studentIdInput = document.getElementById('student-id');
+      const emailInput = document.getElementById('student-email');
+      const passwordInput = document.getElementById('student-password');
       const loginBtn = document.getElementById('login-btn');
       const loginSpinner = document.getElementById('login-spinner');
       const authSection = document.getElementById('auth-section');
       const dashboardSection = document.getElementById('dashboard-section');
       const headerUser = document.getElementById('header-user');
 
-      const studentId = studentIdInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
 
       // UI state loading
       loginBtn.disabled = true;
@@ -805,16 +826,16 @@
       loginBtn.querySelector('span').innerText = 'กำลังเข้าสู่ระบบ...';
 
       try {
-        const result = await authenticateStudent(studentId);
+        const result = await authenticateStudent(email, password);
 
         if (result.success) {
           currentStudent = result;
 
           // Hydrate Dashboard Data
           document.getElementById('student-name-display').innerText = currentStudent.name;
-          document.getElementById('student-id-display').innerText = currentStudent.studentId;
+          document.getElementById('student-email-display').innerText = currentStudent.email;
           document.getElementById('credit-balance').innerText = currentStudent.balance;
-          document.getElementById('user-avatar').innerText = currentStudent.name.replace("นิสิต ", "").slice(0, 2);
+          document.getElementById('user-avatar').innerText = currentStudent.name.slice(0, 2);
 
           // Animate Form Out & Dashboard In
           authSection.classList.add('opacity-0', 'scale-95');
@@ -829,7 +850,7 @@
           }, 300);
 
         } else {
-          alert("ไม่พบรหัสนิสิตนี้ในระบบ หรือบัญชีไม่ได้รับอนุญาต");
+          alert(`ไม่สามารถเข้าสู่ระบบได้: ${result.error}`);
         }
       } catch (err) {
         alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง");
@@ -846,10 +867,13 @@
       const authSection = document.getElementById('auth-section');
       const dashboardSection = document.getElementById('dashboard-section');
       const headerUser = document.getElementById('header-user');
-      const studentIdInput = document.getElementById('student-id');
+      
+      const emailInput = document.getElementById('student-email');
+      const passwordInput = document.getElementById('student-password');
 
-      studentIdInput.value = '';
-      validateStudentIdInput('');
+      emailInput.value = '';
+      passwordInput.value = '';
+      validateInputs();
 
       dashboardSection.classList.remove('opacity-100');
       dashboardSection.classList.add('opacity-0');
@@ -884,17 +908,16 @@
       chatWrapper.classList.remove('hidden');
       
       // Update highlights
-      btnChat.className = "bg-emerald-950/20 border border-emerald-500/50 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 shadow-glow-emerald cursor-pointer";
+      btnChat.className = "bg-indigo-950/20 border border-indigo-500/50 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 shadow-glow-indigo cursor-pointer";
       btnHomework.className = "bg-white/5 hover:bg-slate-900 border border-white/5 hover:border-blue-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-lg cursor-pointer";
 
       // Scroll smoothly
       chatWrapper.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Custom helper to safely shut down
     function closeCozeChat() {
       document.getElementById('coze-chat-wrapper').classList.add('hidden');
-      document.getElementById('btn-action-chat').className = "bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer";
+      document.getElementById('btn-action-chat').className = "bg-white/5 hover:bg-indigo-950/20 border border-white/5 hover:border-indigo-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-indigo cursor-pointer";
     }
 
     // HOMEWORK GRADER ACTIONS
@@ -909,7 +932,7 @@
 
       // Update highlights
       btnHomework.className = "bg-blue-950/20 border border-blue-500/50 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 shadow-lg cursor-pointer";
-      btnChat.className = "bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer";
+      btnChat.className = "bg-white/5 hover:bg-indigo-950/20 border border-white/5 hover:border-indigo-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-indigo cursor-pointer";
 
       homeworkWrapper.scrollIntoView({ behavior: 'smooth' });
     }
@@ -1052,7 +1075,6 @@
       }, 50);
     }
 
-    // Modal close helper
     function closeSupportModal() {
       const modal = document.getElementById('support-modal');
       const content = document.getElementById('support-modal-content');
@@ -1100,10 +1122,10 @@
       const userBubble = document.createElement('div');
       userBubble.className = "flex gap-2 justify-end";
       userBubble.innerHTML = `
-        <div class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-slate-100 text-sm">
+        <div class="bg-indigo-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-slate-100 text-sm">
           ${text}
         </div>
-        <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold font-mono">ST</div>
+        <div class="w-8 h-8 rounded-full bg-indigo-500/10 text-indigo-400 flex items-center justify-center shrink-0 text-xs font-bold font-mono">ST</div>
       `;
       messagesContainer.appendChild(userBubble);
       input.value = '';
@@ -1115,7 +1137,7 @@
       const typingBubble = document.createElement('div');
       typingBubble.className = "flex gap-2";
       typingBubble.innerHTML = `
-        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+        <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 font-bold">AI</div>
         <div class="bg-slate-900 border border-white/5 p-3 rounded-xl rounded-tl-none text-slate-500 italic text-xs" id="typing-indicator">
           ติวเตอร์กำลังพิมพ์คำอธิบาย...
         </div>
@@ -1141,9 +1163,9 @@
         }
 
         responseBubble.innerHTML = `
-          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
-          <div class="bg-slate-900 border border-white/5 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-300">
-            <p class="font-bold text-emerald-400 mb-1"> Calculus Tutor Bot v1.5 </p>
+          <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+          <div class="bg-slate-900 border border-white/5 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-300 font-sans">
+            <p class="font-bold text-indigo-400 mb-1 font-sans"> Calculus Tutor Bot v1.5 </p>
             ${reply}
           </div>
         `;
