@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KU Calculus AI Tutor Portal - ระบบติวเตอร์แคลคูลัสอัจฉริยะ มหาวิทยาลัยเกษตรศาสตร์</title>
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="พอร์ทัลนิสิตระบบติวเตอร์แคลคูลัสอัจฉริยะ (Calculus AI Tutor) สำหรับเรียนรู้ ตรวจสอบกระดาษทด และคำนวณคะแนนด้วย AI แบบเรียลไทม์ โครงการความร่วมมือแบ่งปันต้นทุนพลังงานสมองประดิษฐ์">
+  <meta name="author" content="KU Faculty of Engineering / AI Tutor Project">
+
+  <!-- Google Fonts: Inter & Sarabun for Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Tailwind Config Customizations for Academic Theme & Micro-animations -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ku: {
+              dark: '#071811',      /* Deep Forest Dark Background */
+              deep: '#0a2618',      /* Panel Background */
+              green: '#006633',     /* KU Green Brand Color */
+              primary: '#00a859',   /* Bright Emerald Green */
+              accent: '#34d399',    /* Teal Accent */
+              navy: '#0f172a',      /* Slate Navy */
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Sarabun', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow-emerald': '0 0 20px rgba(16, 185, 129, 0.15)',
+            'glow-emerald-lg': '0 0 35px rgba(16, 185, 129, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Custom Core Styles & Glassmorphism Utilities -->
+  <style>
+    /* CSS Custom variables & Utilities */
+    body {
+      background: radial-gradient(circle at 50% 0%, #0a2e1d 0%, #06110b 60%);
+      font-family: 'Inter', 'Sarabun', sans-serif;
+      min-height: 100vh;
+      color: #e2e8f0;
+      overflow-x: hidden;
+    }
+
+    /* Soft Animated Background Gradients */
+    .bg-mesh-1 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 168, 89, 0.15) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      filter: blur(80px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .bg-mesh-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(30, 58, 138, 0.2) 0%, transparent 75%);
+      bottom: -100px;
+      right: -100px;
+      filter: blur(100px);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Shimmer Effect for Premium Cards */
+    .shimmer-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+      animation: shimmer 5s infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer {
+      100% { transform: translateX(100%); }
+    }
+
+    /* Smooth Transitions */
+    .transition-all-300 {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Coze Chat Container Custom styling to fit academic UI */
+    #coze-chat-container {
+      height: 600px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1rem;
+      overflow: hidden;
+      background: rgba(10, 24, 18, 0.7);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="flex flex-col justify-between relative text-slate-200">
+
+  <!-- Ambient background elements -->
+  <div class="bg-mesh-1"></div>
+  <div class="bg-mesh-2"></div>
+
+  <!-- Header Section -->
+  <header class="border-b border-white/5 bg-ku-dark/80 backdrop-blur-md sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Academic Emblem Placeholder Icon -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ku-green to-ku-primary flex items-center justify-center text-white font-bold text-lg shadow-glow-emerald">
+          KU
+        </div>
+        <div>
+          <h1 class="text-md sm:text-lg font-bold text-white leading-tight flex items-center gap-2">
+            Calculus <span class="bg-gradient-to-r from-ku-primary to-ku-accent bg-clip-text text-transparent">AI Tutor</span>
+          </h1>
+          <p class="text-xs text-emerald-500/80 font-medium tracking-wide">มหาวิทยาลัยเกษตรศาสตร์</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Status Indicator -->
+        <div class="hidden sm:flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="system-status" class="text-xs text-emerald-400 font-medium">Online</span>
+        </div>
+        
+        <!-- User Info Action (Hidden until Login) -->
+        <div id="header-user" class="hidden flex items-center gap-2">
+          <span id="user-avatar" class="w-8 h-8 rounded-full bg-ku-accent/20 border border-ku-accent/30 text-ku-accent flex items-center justify-center text-xs font-bold font-mono">KU</span>
+          <button onclick="logout()" class="text-xs text-slate-400 hover:text-red-400 transition-colors py-1 px-2 rounded-lg hover:bg-white/5">
+            ออกจากระบบ
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 flex flex-col justify-center items-center">
+
+    <!-- 1. LANDING & LOGIN COMPONENT -->
+    <section id="auth-section" class="w-full max-w-xl py-6 flex flex-col gap-8 transition-all-300">
+      
+      <!-- Premium Hero Presentation -->
+      <div class="text-center space-y-3">
+        <span class="px-3 py-1 text-xs font-semibold uppercase tracking-wider text-emerald-300 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+          Calculus I & II Co-Learning Portal
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight leading-snug">
+          ระบบติวเตอร์ AI <span class="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">แคลคูลัสอัจฉริยะ</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base max-w-md mx-auto leading-relaxed">
+          พัฒนาขึ้นเพื่อนิสิตวิศวกรรมศาสตร์และวิทยาศาสตร์ เรียนรู้ได้ยืดหยุ่น ตรวจวิธีทำละเอียด 24 ชั่วโมง ภายใต้โครงการแชร์พลังงานสมองประดิษฐ์
+        </p>
+      </div>
+
+      <!-- Login Card Container -->
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 backdrop-blur-xl shadow-glow-emerald shimmer-card relative">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          เข้าสู่ระบบสำหรับนิสิต
+        </h3>
+
+        <!-- Form for Login -->
+        <div class="space-y-5">
+          <div>
+            <label for="student-id" class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+              รหัสนิสิต (10 หลัก เช่น 6510401234)
+            </label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="student-id" 
+                maxlength="10" 
+                placeholder="ป้อนรหัสนิสิตของคุณ" 
+                class="w-full bg-slate-950/60 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 font-mono tracking-widest text-lg transition-all-300"
+                onkeyup="validateStudentIdInput(this.value)"
+              >
+              <div class="absolute right-3 top-3.5 flex items-center">
+                <!-- Valid Checkmark Indicator -->
+                <span id="validation-check" class="hidden text-emerald-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.748-5.25z" clip-rule="evenodd" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+            <p id="auth-error-msg" class="text-xs text-rose-400 mt-2 hidden">
+              * รหัสนิสิตต้องเป็นตัวเลข 10 หลักเท่านั้น
+            </p>
+          </div>
+
+          <button 
+            id="login-btn" 
+            onclick="handleLogin()" 
+            disabled
+            class="w-full bg-emerald-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300"
+          >
+            <span>เข้าสู่ระบบติวเตอร์</span>
+            <!-- Spinner (Hidden by default) -->
+            <svg id="login-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Footnote inside Card -->
+        <div class="mt-6 pt-6 border-t border-white/5 flex flex-col gap-2">
+          <div class="flex gap-2.5 items-start">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-emerald-500 mt-0.5 shrink-0">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 111.063 1.063L12 13.5h-1.5V16.5h3M21.75 12a9.75 9.75 0 11-19.5 0 9.75 9.75 0 0119.5 0z" />
+            </svg>
+            <p class="text-[11px] text-slate-500 leading-normal font-sans">
+              <strong>ระบบแบ่งปันต้นทุน (Cost-Sharing Model):</strong> ค่าทรัพยากรการประมวลผลของโมเดล AI (API Token) ถูกจัดสรรตามการสนับสนุนจริง นิสิตเริ่มต้นจะได้รับเครดิตทดลองฟรีประจำสัปดาห์
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. STUDENT DASHBOARD COMPONENT (Hidden initially) -->
+    <section id="dashboard-section" class="w-full space-y-6 hidden opacity-0 transition-all-300">
+      
+      <!-- Dashboard Welcome Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/50 border border-white/5 rounded-2xl p-6 backdrop-blur-lg">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+            ยินดีต้อนรับ, <span id="student-name-display" class="text-emerald-400">นิสิต</span>
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            ภาควิชาวิศวกรรมคอมพิวเตอร์ คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเกษตรศาสตร์ | รหัสนิสิต: <span id="student-id-display" class="font-mono text-emerald-400/90 font-medium">65xxxxxxxx</span>
+          </p>
+        </div>
+        
+        <!-- Cohort / Course Banner badge -->
+        <div class="self-start md:self-center flex items-center gap-2 bg-emerald-950/40 border border-emerald-500/20 px-3 py-1.5 rounded-xl">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          <span class="text-xs font-semibold text-emerald-300 font-mono">CALCULUS I (01204111)</span>
+        </div>
+      </div>
+
+      <!-- Grid Layout for Wallet & Operations -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- WALLET CARD (1 Column) -->
+        <article class="bg-gradient-to-b from-slate-900 to-slate-950 border border-white/10 rounded-2xl p-6 flex flex-col justify-between shadow-glow-emerald relative overflow-hidden group">
+          <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all-300"></div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                กระเป๋าเงินนิสิต (Student Wallet)
+              </h3>
+              <!-- Credit icon -->
+              <span class="text-emerald-400 bg-emerald-400/10 p-1.5 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
+                </svg>
+              </span>
+            </div>
+            
+            <div class="my-4">
+              <p class="text-xs text-slate-500">เครดิตคงเหลือใช้งาน</p>
+              <div class="flex items-baseline gap-2 mt-1">
+                <span id="credit-balance" class="text-4xl sm:text-5xl font-black text-white font-mono tracking-tight">0</span>
+                <span class="text-sm text-emerald-400 font-bold">เครดิต</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cost-sharing support button trigger -->
+          <div class="mt-6 pt-4 border-t border-white/5">
+            <button 
+              onclick="openSupportModal()"
+              class="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 hover:text-emerald-300 border border-emerald-500/20 hover:border-emerald-500/40 text-xs sm:text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all-300"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              สนับสนุนค่าระบบ / เติมเครดิต
+            </button>
+          </div>
+        </article>
+
+        <!-- ACTION SELECTION PANELS (2 Columns) -->
+        <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
+          <!-- Card Action 1: Open Coze Chat -->
+          <button 
+            onclick="activateCozeChat()" 
+            id="btn-action-chat"
+            class="bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer"
+          >
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-emerald-400 transition-colors">เริ่มแชทกับติวเตอร์</h3>
+              <p class="text-xs text-slate-400 leading-normal">
+                ถามการบ้านแคลคูลัส สอบถามสูตร ปรึกษาทฤษฎีบท หรือแก้ปัญหาโจทย์ดิฟ-อินทิเกรตแบบมีภาพประกอบกับติวเตอร์ AI
+              </p>
+            </div>
+            <span class="text-xs font-semibold text-emerald-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              เปิดหน้าต่างแชทติวเตอร์ &rarr;
+            </span>
+          </button>
+
+          <!-- Card Action 2: Open Homework Checker -->
+          <button 
+            onclick="activateHomeworkChecker()" 
+            id="btn-action-homework"
+            class="bg-white/5 hover:bg-slate-900 border border-white/5 hover:border-blue-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-lg cursor-pointer"
+          >
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">ส่งกระดาษทดให้ AI ตรวจ</h3>
+              <p class="text-xs text-slate-400 leading-normal">
+                ถ่ายภาพวิธีทำหรืออัปโหลดกระดาษทดเพื่อให้ AI ประมวลผล ค้นหาข้อผิดพลาดทางตรรกะคณิตศาสตร์และจุดที่คิดเลขผิด
+              </p>
+            </div>
+            <span class="text-xs font-semibold text-blue-400 mt-4 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              เปิดตัวตรวจการบ้าน &rarr;
+            </span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- DYNAMIC OPERATION AREAS -->
+
+      <!-- A. COZE CHAT WORKSPACE (Initially Hidden) -->
+      <div id="coze-chat-wrapper" class="hidden transition-all-300 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-bold text-slate-300 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Coze AI Calculus Tutor Simulator
+          </span>
+          <button onclick="closeCozeChat()" class="text-xs text-rose-400 hover:underline">
+            ปิดติวเตอร์แชท
+          </button>
+        </div>
+        
+        <!-- Coze SDK Target Container -->
+        <div id="coze-chat-container">
+          <!-- Mock Interactive Chat Window inside Coze for verification before SDK injection -->
+          <div class="flex flex-col h-full justify-between p-4">
+            
+            <div id="mock-chat-messages" class="flex-grow overflow-y-auto space-y-4 pr-2 text-sm max-h-[460px]">
+              
+              <!-- System / Welcome Msg -->
+              <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+                <div class="bg-slate-900 border border-white/5 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-300">
+                  <p class="font-bold text-emerald-400 mb-1"> Calculus Tutor Bot v1.5 </p>
+                  สวัสดีครับนิสิต! ยินดีต้อนรับสู่ติวเตอร์ส่วนตัว ยินดีต้อนรับสู่วิชาแคลคูลัส มีโจทย์ข้อไหนที่ไม่เข้าใจหรืออยากให้ช่วยอธิบาย หรือต้องการรูปวาดแสดงพื้นที่กราฟ บอกมาได้เลยครับ!
+                </div>
+              </div>
+              
+            </div>
+
+            <!-- Input area for mock chat -->
+            <div class="border-t border-white/5 pt-3 mt-2 flex gap-2">
+              <input 
+                type="text" 
+                id="mock-chat-input"
+                placeholder="พิมพ์ถามคำถามแคลคูลัส (เช่น ช่วยอธิบายกฎลูกโซ่ Chain Rule)" 
+                class="flex-grow bg-slate-950/60 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-emerald-500 text-sm"
+                onkeypress="if(event.key === 'Enter') sendMockMessage()"
+              >
+              <button 
+                onclick="sendMockMessage()"
+                class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-4 rounded-xl text-sm transition-all-300"
+              >
+                ส่ง
+              </button>
+            </div>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-500 text-center">
+          * ระบบจำลองการแชท (Mock Simulation) ด้านบนสามารถเชื่อมต่อ API Coze ตัวจริงโดยใส่ API Key/SDK scripts ใน HTML
+        </p>
+      </div>
+
+      <!-- B. HOMEWORK CHECKING WORKSPACE (Initially Hidden) -->
+      <div id="homework-wrapper" class="hidden transition-all-300 bg-slate-900/50 border border-white/10 rounded-2xl p-6 space-y-6">
+        <div class="flex items-center justify-between border-b border-white/5 pb-4">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-blue-400">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18V6c0-1.1.9-2 2-2h9.75m1.5 0a2.25 2.25 0 01-3.5 0" />
+            </svg>
+            <h3 class="text-base font-bold text-white">ระบบตรวจสอบกระดาษทด / ตรวจการบ้านอัจฉริยะ</h3>
+          </div>
+          <button onclick="closeHomeworkChecker()" class="text-xs text-rose-400 hover:underline">
+            ปิดส่วนนี้
+          </button>
+        </div>
+
+        <!-- File Upload Form Area -->
+        <div id="upload-form-container" class="space-y-4">
+          <div 
+            id="dropzone" 
+            class="border-2 border-dashed border-white/10 hover:border-blue-500/50 rounded-2xl p-8 text-center cursor-pointer transition-all-300 bg-slate-950/20"
+            onclick="triggerFileInput()"
+            ondragover="handleDragOver(event)"
+            ondragleave="handleDragLeave(event)"
+            ondrop="handleDrop(event)"
+          >
+            <input 
+              type="file" 
+              id="homework-file" 
+              accept="image/*,.pdf" 
+              class="hidden" 
+              onchange="handleFileSelect(event)"
+            >
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                </svg>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-white">ลากและวางรูปภาพกระดาษทด หรือคลิกเพื่ออัปโหลด</p>
+                <p class="text-xs text-slate-500 mt-1">รองรับไฟล์ภาพ JPEG, PNG หรือ PDF (ขนาดไม่เกิน 10MB)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- File selected view (Hidden by default) -->
+          <div id="file-info-box" class="hidden flex items-center justify-between bg-slate-950/40 border border-white/5 p-4 rounded-xl">
+            <div class="flex items-center gap-3">
+              <span class="text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                </svg>
+              </span>
+              <div>
+                <p id="file-name" class="text-sm font-medium text-white truncate max-w-xs sm:max-w-md">calculus-limit-homework.jpg</p>
+                <p id="file-size" class="text-xs text-slate-500">420 KB</p>
+              </div>
+            </div>
+            <button onclick="clearSelectedFile()" class="text-slate-500 hover:text-red-400 transition-colors">
+              ลบออก
+            </button>
+          </div>
+
+          <!-- Submit Action Button -->
+          <button 
+            id="btn-grade-homework"
+            onclick="processHomeworkGrading()"
+            disabled
+            class="w-full bg-slate-800 text-slate-400 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition-all-300"
+          >
+            เริ่มกระบวนการตรวจสอบโดย AI
+          </button>
+        </div>
+
+        <!-- Simulated Loading/Analysis Phase (Hidden by default) -->
+        <div id="grading-loading-container" class="hidden space-y-4 py-4">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span id="analysis-step-text">กำลังสแกนลายมือข้อความคณิตศาสตร์...</span>
+            <span id="analysis-progress-pct" class="font-mono">0%</span>
+          </div>
+          <!-- Progress bar -->
+          <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden">
+            <div id="analysis-progress-bar" class="bg-blue-500 h-2 rounded-full w-0 transition-all duration-300"></div>
+          </div>
+          
+          <!-- Loading log text terminal -->
+          <div id="analysis-logs" class="bg-slate-950 p-4 rounded-xl font-mono text-[11px] text-emerald-400 space-y-1 h-24 overflow-y-auto">
+            <p>> Starting Calculus AI Evaluation Engine v2.0...</p>
+          </div>
+        </div>
+
+        <!-- Dynamic Results Block (Hidden by default) -->
+        <div id="grading-result-container" class="hidden bg-slate-950/60 border border-white/5 rounded-2xl p-4 sm:p-6 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/5 pb-4">
+            <div>
+              <h4 class="text-lg font-bold text-white">ผลลัพธ์การตรวจสอบการบ้านแคลคูลัส</h4>
+              <p class="text-xs text-slate-400 mt-1">หัวข้อ: อนุพันธ์และฟังก์ชันตรีโกณมิติ (Differentiation)</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <!-- Score Badge -->
+              <div class="bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-2xl text-center">
+                <p class="text-[10px] text-amber-400 font-bold uppercase tracking-wider">คะแนนประเมิน</p>
+                <p class="text-2xl font-black text-amber-400 font-mono">8 / 10</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step Analysis Table -->
+          <div class="space-y-4">
+            <h5 class="text-sm font-semibold text-slate-300">ผลการวิเคราะห์ทีละขั้นตอน:</h5>
+            
+            <div class="space-y-3">
+              <!-- Step 1 -->
+              <div class="bg-emerald-950/20 border border-emerald-500/10 p-3 rounded-xl flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs shrink-0 font-bold">1</span>
+                <div>
+                  <p class="text-xs font-bold text-emerald-400 uppercase tracking-wide">ขั้นตอนที่ 1: การใช้สูตรอนุพันธ์ของผลคูณ (Product Rule)</p>
+                  <p class="text-sm text-slate-300 mt-1">โจทย์: \( \frac{d}{dx} [x^2 \sin(x)] = x^2 \frac{d}{dx}[\sin(x)] + \sin(x) \frac{d}{dx}[x^2] \)</p>
+                  <p class="text-xs text-emerald-500 mt-1 font-semibold">&bull; ถูกต้อง: ใช้สูตรหน้าดิฟหลังบวกหลังดิฟหน้าถูกต้องตามหลักเกณฑ์</p>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="bg-emerald-950/20 border border-emerald-500/10 p-3 rounded-xl flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs shrink-0 font-bold">2</span>
+                <div>
+                  <p class="text-xs font-bold text-emerald-400 uppercase tracking-wide">ขั้นตอนที่ 2: การคำนวณอนุพันธ์พื้นฐาน</p>
+                  <p class="text-sm text-slate-300 mt-1">ผลการดิฟ: \( = x^2 \cos(x) + 2x \sin(x) \)</p>
+                  <p class="text-xs text-emerald-500 mt-1 font-semibold">&bull; ถูกต้อง: หาอนุพันธ์ \( \sin(x) \rightarrow \cos(x) \) และ \( x^2 \rightarrow 2x \) ถูกต้อง</p>
+                </div>
+              </div>
+
+              <!-- Step 3 (Calculated Error) -->
+              <div class="bg-rose-950/30 border border-rose-500/20 p-3 rounded-xl flex gap-3">
+                <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center text-xs shrink-0 font-bold">3</span>
+                <div class="w-full">
+                  <p class="text-xs font-bold text-rose-400 uppercase tracking-wide">ขั้นตอนที่ 3: การแทนค่า \( x = \pi \)</p>
+                  <p class="text-sm text-slate-300 mt-1">วิธีทำของนิสิต: \( \pi^2 \cos(\pi) + 2\pi \sin(\pi) = \pi^2 (-1) + 2\pi (1) = -\pi^2 + 2\pi \)</p>
+                  
+                  <div class="mt-2 bg-rose-950/40 p-2.5 rounded-lg border border-rose-500/10 text-xs text-rose-300 space-y-1">
+                    <p class="font-bold">&times; ตรวจพบข้อผิดพลาดด้านการคำนวณ (Calculation Error):</p>
+                    <p>นิสิตประเมินค่าฟังก์ชันตรีโกณมิติ \( \sin(\pi) \) คลาดเคลื่อน โดยระบุเป็น \( 1 \)</p>
+                    <p class="text-[11px] text-slate-400 italic">ความจริง: ค่าที่ถูกต้องของ \( \sin(\pi) = 0 \)</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recommendation -->
+              <div class="bg-blue-950/10 border border-blue-500/10 p-3 rounded-xl flex gap-3 text-xs">
+                <span class="w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 font-bold">💡</span>
+                <div>
+                  <p class="font-bold text-blue-400">ข้อแนะนำเพิ่มเติมจาก AI Tutor:</p>
+                  <p class="text-slate-400 mt-1">คำตอบสุดท้ายที่ถูกต้องคือ \( -\pi^2 \) (หรือประมาณ -9.87) นิสิตระมัดระวังเรื่องค่าวงกลมหนึ่งหน่วยตอนแทนค่ามุมตรีโกณมิติ การใช้สูตรแคลคูลัสหลัก ๆ ถูกต้องสมบูรณ์ดีมากแล้วครับ!</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Support Cost-Sharing Modal (Initially Hidden) -->
+  <div id="support-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
+    <!-- Overlay backdrop -->
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeSupportModal()"></div>
+    
+    <!-- Modal Card Content -->
+    <div class="bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg p-6 relative z-10 shadow-glow-emerald-lg scale-95 transition-transform duration-300" id="support-modal-content">
+      <div class="flex items-center justify-between border-b border-white/5 pb-4 mb-4">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-emerald-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          สนับสนุนค่าระบบ & เติมเครดิต
+        </h3>
+        <button onclick="closeSupportModal()" class="text-slate-500 hover:text-slate-300">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Cost Sharing Model Explanation -->
+      <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed">
+        <p>
+          ระบบ <strong>Calculus AI Tutor</strong> เปิดให้ใช้งานภายใต้โครงสร้างการทำงานแบบ <strong>Cost-Sharing (การแบ่งปันต้นทุนร่วมกัน)</strong> สำหรับนิสิตผู้เข้าใช้หลายรุ่นต่อเนื่อง
+        </p>
+        
+        <div class="bg-slate-950 p-4 rounded-xl border border-white/5 space-y-2.5">
+          <h4 class="font-bold text-emerald-400 text-xs uppercase tracking-wider">ทำไมจึงมีระบบเครดิต?</h4>
+          <p class="text-[11px] text-slate-400">
+            การถามตอบด้วย AI และตรวจการบ้านอย่างละเอียด ใช้ทรัพยากรการประมวลผลสูง (Large Language Models API) ซึ่งมีค่าบริการเป็นจำนวน Token เพื่อรักษาความเป็นกลางและให้บริการต่อเนื่องระยะยาว ระบบจึงจำเป็นต้องจัดสรรทรัพยากรอย่างโปร่งใส
+          </p>
+        </div>
+
+        <div class="space-y-2">
+          <h4 class="font-bold text-white">วิธีการได้รับเครดิต/สนับสนุนโครงการ:</h4>
+          <ul class="list-disc pl-5 space-y-1 text-slate-400 text-xs">
+            <li><strong>เครดิตฟรีประจำสัปดาห์:</strong> มหาวิทยาลัยจัดสรรให้ฟรีท่านละ 100 เครดิตทุกวันจันทร์</li>
+            <li><strong>สนับสนุนรายวิชา (Co-payment):</strong> บริจาคเข้าทุนพัฒนาคณะเพื่อแลกรับเครดิตเพิ่มเติม</li>
+            <li><strong>โครงการส่งเสริมนิสิตช่วยสอน (TA Support):</strong> แลกคะแนนจากการตอบปัญหาให้เพื่อนในห้องเรียน</li>
+          </ul>
+        </div>
+
+        <!-- Simulated QR Payment for Demo -->
+        <div class="bg-emerald-950/20 border border-emerald-500/20 p-4 rounded-xl flex items-center justify-between gap-4 mt-2">
+          <div class="space-y-1">
+            <p class="text-xs font-bold text-emerald-300">จำลองการเติมเครดิตด่วน</p>
+            <p class="text-[11px] text-slate-400">เพิ่ม 100 เครดิต สำหรับจำลองการทำงานของแอปพลิเคชัน</p>
+          </div>
+          <button 
+            onclick="addMockCredits(100)" 
+            class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded-lg text-xs whitespace-nowrap transition-all-300"
+          >
+            +100 เครดิต (ทดสอบ)
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-white/5 text-right">
+        <button onclick="closeSupportModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-4 rounded-xl text-xs transition-all-300">
+          ตกลง
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="border-t border-white/5 py-6 bg-ku-dark text-slate-500 text-xs mt-12">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="text-center md:text-left">
+        <p>&copy; 2026 Calculus AI Tutor. คณะวิศวกรรมศาสตร์ มหาวิทยาลัยเกษตรศาสตร์</p>
+        <p class="text-[10px] text-slate-600 mt-1">ขับเคลื่อนด้วยระบบตรวจหาลายมือและ Coze Web SDK. ออกแบบเพื่อการจัดสรรทรัพยากรการศึกษาอย่างยั่งยืน</p>
+      </div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:underline hover:text-slate-400">นโยบายความเป็นส่วนตัว</a>
+        <span>|</span>
+        <a href="#" class="hover:underline hover:text-slate-400">เงื่อนไขการแชร์ต้นทุน</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- =========================================================================
+       CRITICAL: EXCELLENT PLACEHOLDER FOR COZE CHAT SDK INJECTION
+       Developers can inject the script dynamically by replacing this section.
+       Example SDK usage:
+       <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-sdk/1.0.1/play.js"></script>
+       <script>
+         new CozeWebSDK.WebChat({
+           config: {
+             bot_id: 'YOUR_BOT_ID_HERE',
+           },
+           componentProps: {
+             title: 'KU Calculus AI Tutor',
+           },
+           el: document.getElementById('coze-chat-container'),
+         });
+       </script>
+       ========================================================================= -->
+  <!-- COZE_CHAT_SDK_PLACEHOLDER_START -->
+  <!-- <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-sdk/1.1.0-alpha.3/play.js"></script> -->
+  <!-- COZE_CHAT_SDK_PLACEHOLDER_END -->
+
+
+  <!-- core Frontend Logic Scripts -->
+  <script>
+    // Client-side Session State
+    let currentStudent = null;
+
+    /**
+     * 1. FRONTEND VALIDATION
+     * Validates the input for Student ID (KU style: 10 digits).
+     * @param {string} val 
+     */
+    function validateStudentIdInput(val) {
+      const loginBtn = document.getElementById('login-btn');
+      const errorMsg = document.getElementById('auth-error-msg');
+      const checkIcon = document.getElementById('validation-check');
+
+      // Regular Expression: Accepts exactly 10 digits
+      const isDigitsOnly = /^\d{10}$/.test(val);
+
+      if (val.length === 0) {
+        errorMsg.classList.add('hidden');
+        checkIcon.classList.add('hidden');
+        loginBtn.disabled = true;
+        setButtonState(loginBtn, false);
+      } else if (!/^\d*$/.test(val)) {
+        // Contains letters or special chars
+        errorMsg.classList.remove('hidden');
+        checkIcon.classList.add('hidden');
+        loginBtn.disabled = true;
+        setButtonState(loginBtn, false);
+      } else if (val.length === 10 && isDigitsOnly) {
+        // Correct 10-digit format
+        errorMsg.classList.add('hidden');
+        checkIcon.classList.remove('hidden');
+        loginBtn.disabled = false;
+        setButtonState(loginBtn, true);
+      } else {
+        // Digits but not 10 length yet
+        errorMsg.classList.add('hidden');
+        checkIcon.classList.add('hidden');
+        loginBtn.disabled = true;
+        setButtonState(loginBtn, false);
+      }
+    }
+
+    // Toggle button style based on validity state
+    function setButtonState(btn, isActive) {
+      if (isActive) {
+        btn.className = "w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-glow-emerald hover:-translate-y-0.5 transition-all-300";
+      } else {
+        btn.className = "w-full bg-emerald-600/50 text-slate-300 font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 cursor-not-allowed transition-all-300";
+      }
+    }
+
+    /**
+     * 2. MOCKUP BACKEND LOGIC
+     * Simulates fetching student details asynchronously from a server
+     * (e.g. Google Apps Script Web App url).
+     * 
+     * @param {string} studentId 
+     * @returns {Promise<Object>}
+     */
+    async function authenticateStudent(studentId) {
+      // Keep this delay to simulate a real HTTP request overhead
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      // Mock database mapping Kasetsart Student IDs
+      const mockDatabase = {
+        "6510401111": { name: "นิสิต สมชาย ใจสู้", balance: 150 },
+        "6510402222": { name: "นิสิต สรวิชญ์ วิวัฒนกุล", balance: 80 },
+        "6510403333": { name: "นิสิต ณิชชา แก้วเจริญ", balance: 210 },
+        "6510405555": { name: "นิสิต อนันดา ทองดี", balance: 0 }
+      };
+
+      // Fallback for demo: Any valid 10-digit ID not in database receives default values
+      if (mockDatabase[studentId]) {
+        return {
+          success: true,
+          studentId: studentId,
+          name: mockDatabase[studentId].name,
+          balance: mockDatabase[studentId].balance,
+          cohort: "Kasetsart Engineer Cohort #86"
+        };
+      } else {
+        return {
+          success: true,
+          studentId: studentId,
+          name: "นิสิต ทั่วไป (ผู้ใช้ใหม่)",
+          balance: 100, // Default signup bonus credits
+          cohort: "Kasetsart Student Guest"
+        };
+      }
+
+      /* =======================================================================
+         DEVELOPER GUIDE FOR LIVE BACKEND (GOOGLE APPS SCRIPT):
+         -----------------------------------------------------------------------
+         To connect to Google Apps Script Web App deployment later:
+         
+         const webAppUrl = "https://script.google.com/macros/s/AKfycb.../exec";
+         try {
+           const response = await fetch(`${webAppUrl}?action=login&studentId=${studentId}`);
+           const data = await response.json();
+           return data; // Expected structure: { success: true, name: "...", balance: X }
+         } catch (error) {
+           console.error("Backend connection failed: ", error);
+           return { success: false, error: "ไม่สามารถเชื่อมต่อฐานข้อมูลภายนอกได้" };
+         }
+         ======================================================================= */
+    }
+
+    /**
+     * 3. AUTHENTICATION CONTROLLER
+     */
+    async function handleLogin() {
+      const studentIdInput = document.getElementById('student-id');
+      const loginBtn = document.getElementById('login-btn');
+      const loginSpinner = document.getElementById('login-spinner');
+      const authSection = document.getElementById('auth-section');
+      const dashboardSection = document.getElementById('dashboard-section');
+      const headerUser = document.getElementById('header-user');
+
+      const studentId = studentIdInput.value.trim();
+
+      // UI state loading
+      loginBtn.disabled = true;
+      loginSpinner.classList.remove('hidden');
+      loginBtn.querySelector('span').innerText = 'กำลังเข้าสู่ระบบ...';
+
+      try {
+        const result = await authenticateStudent(studentId);
+
+        if (result.success) {
+          currentStudent = result;
+
+          // Hydrate Dashboard Data
+          document.getElementById('student-name-display').innerText = currentStudent.name;
+          document.getElementById('student-id-display').innerText = currentStudent.studentId;
+          document.getElementById('credit-balance').innerText = currentStudent.balance;
+          document.getElementById('user-avatar').innerText = currentStudent.name.replace("นิสิต ", "").slice(0, 2);
+
+          // Animate Form Out & Dashboard In
+          authSection.classList.add('opacity-0', 'scale-95');
+          setTimeout(() => {
+            authSection.classList.add('hidden');
+            dashboardSection.classList.remove('hidden');
+            headerUser.classList.remove('hidden');
+            setTimeout(() => {
+              dashboardSection.classList.remove('opacity-0');
+              dashboardSection.classList.add('opacity-100');
+            }, 50);
+          }, 300);
+
+        } else {
+          alert("ไม่พบรหัสนิสิตนี้ในระบบ หรือบัญชีไม่ได้รับอนุญาต");
+        }
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์ กรุณาลองใหม่อีกครั้ง");
+      } finally {
+        // Reset UI state
+        loginBtn.disabled = false;
+        loginSpinner.classList.add('hidden');
+        loginBtn.querySelector('span').innerText = 'เข้าสู่ระบบติวเตอร์';
+      }
+    }
+
+    // Logout function
+    function logout() {
+      const authSection = document.getElementById('auth-section');
+      const dashboardSection = document.getElementById('dashboard-section');
+      const headerUser = document.getElementById('header-user');
+      const studentIdInput = document.getElementById('student-id');
+
+      studentIdInput.value = '';
+      validateStudentIdInput('');
+
+      dashboardSection.classList.remove('opacity-100');
+      dashboardSection.classList.add('opacity-0');
+      
+      setTimeout(() => {
+        dashboardSection.classList.add('hidden');
+        headerUser.classList.add('hidden');
+        authSection.classList.remove('hidden');
+        setTimeout(() => {
+          authSection.classList.remove('opacity-0', 'scale-95');
+          authSection.classList.add('opacity-100');
+        }, 50);
+      }, 300);
+
+      currentStudent = null;
+      closeCozeChat();
+      closeHomeworkChecker();
+    }
+
+    /**
+     * 4. ACTION TOGGLES & VIEWS
+     */
+
+    // COZE CHAT ACTIONS
+    function activateCozeChat() {
+      const chatWrapper = document.getElementById('coze-chat-wrapper');
+      const homeworkWrapper = document.getElementById('homework-wrapper');
+      const btnChat = document.getElementById('btn-action-chat');
+      const btnHomework = document.getElementById('btn-action-homework');
+
+      homeworkWrapper.classList.add('hidden');
+      chatWrapper.classList.remove('hidden');
+      
+      // Update highlights
+      btnChat.className = "bg-emerald-950/20 border border-emerald-500/50 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 shadow-glow-emerald cursor-pointer";
+      btnHomework.className = "bg-white/5 hover:bg-slate-900 border border-white/5 hover:border-blue-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-lg cursor-pointer";
+
+      // Scroll smoothly
+      chatWrapper.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Custom helper to safely shut down
+    function closeCozeChat() {
+      document.getElementById('coze-chat-wrapper').classList.add('hidden');
+      document.getElementById('btn-action-chat').className = "bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer";
+    }
+
+    // HOMEWORK GRADER ACTIONS
+    function activateHomeworkChecker() {
+      const chatWrapper = document.getElementById('coze-chat-wrapper');
+      const homeworkWrapper = document.getElementById('homework-wrapper');
+      const btnChat = document.getElementById('btn-action-chat');
+      const btnHomework = document.getElementById('btn-action-homework');
+
+      chatWrapper.classList.add('hidden');
+      homeworkWrapper.classList.remove('hidden');
+
+      // Update highlights
+      btnHomework.className = "bg-blue-950/20 border border-blue-500/50 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 shadow-lg cursor-pointer";
+      btnChat.className = "bg-white/5 hover:bg-emerald-950/20 border border-white/5 hover:border-emerald-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-glow-emerald cursor-pointer";
+
+      homeworkWrapper.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeHomeworkChecker() {
+      document.getElementById('homework-wrapper').classList.add('hidden');
+      document.getElementById('btn-action-homework').className = "bg-white/5 hover:bg-slate-900 border border-white/5 hover:border-blue-500/30 text-left p-6 rounded-2xl flex flex-col justify-between group transition-all-300 hover:shadow-lg cursor-pointer";
+      clearSelectedFile();
+    }
+
+    /**
+     * 5. FILE UPLOAD & GRADING PROCESS SIMULATION
+     */
+    function triggerFileInput() {
+      document.getElementById('homework-file').click();
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      document.getElementById('dropzone').classList.add('border-blue-500', 'bg-blue-500/5');
+    }
+
+    // Restore styling on leave
+    function handleDragLeave(e) {
+      e.preventDefault();
+      document.getElementById('dropzone').classList.remove('border-blue-500', 'bg-blue-500/5');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('dropzone').classList.remove('border-blue-500', 'bg-blue-500/5');
+      
+      if (e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        displaySelectedFile(file);
+      }
+    }
+
+    function handleFileSelect(e) {
+      if (e.target.files.length > 0) {
+        displaySelectedFile(e.target.files[0]);
+      }
+    }
+
+    function displaySelectedFile(file) {
+      const dropzone = document.getElementById('dropzone');
+      const fileInfoBox = document.getElementById('file-info-box');
+      const fileName = document.getElementById('file-name');
+      const fileSize = document.getElementById('file-size');
+      const submitBtn = document.getElementById('btn-grade-homework');
+
+      fileName.innerText = file.name;
+      fileSize.innerText = (file.size / 1024).toFixed(1) + ' KB';
+
+      dropzone.classList.add('hidden');
+      fileInfoBox.classList.remove('hidden');
+
+      submitBtn.disabled = false;
+      submitBtn.className = "w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl cursor-pointer hover:-translate-y-0.5 shadow-lg transition-all-300";
+    }
+
+    function clearSelectedFile() {
+      document.getElementById('homework-file').value = '';
+      document.getElementById('dropzone').classList.remove('hidden');
+      document.getElementById('file-info-box').classList.add('hidden');
+
+      const submitBtn = document.getElementById('btn-grade-homework');
+      submitBtn.disabled = true;
+      submitBtn.className = "w-full bg-slate-800 text-slate-400 font-bold py-3 px-4 rounded-xl cursor-not-allowed transition-all-300";
+
+      document.getElementById('grading-result-container').classList.add('hidden');
+      document.getElementById('grading-loading-container').classList.add('hidden');
+      document.getElementById('upload-form-container').classList.remove('hidden');
+    }
+
+    // Simulates the full multi-stage AI grading workflow with updates
+    function processHomeworkGrading() {
+      const uploadForm = document.getElementById('upload-form-container');
+      const loader = document.getElementById('grading-loading-container');
+      const progressText = document.getElementById('analysis-step-text');
+      const progressPct = document.getElementById('analysis-progress-pct');
+      const progressBar = document.getElementById('analysis-progress-bar');
+      const logs = document.getElementById('analysis-logs');
+      const resultContainer = document.getElementById('grading-result-container');
+
+      uploadForm.classList.add('hidden');
+      loader.classList.remove('hidden');
+
+      logs.innerHTML = '';
+      appendLog(logs, "Initiating Calculus OCR & Math Analysis Engine...");
+      appendLog(logs, "Loading model weight parameters for Handwriting OCR...");
+
+      const steps = [
+        { pct: 20, text: "สแกนลายมือและแกะสมการโครงสร้าง...", log: "[INFO] Found 1 expression block. Converting pixels to LaTeX nodes." },
+        { pct: 50, text: "วิเคราะห์ความสอดคล้องของตรรกะคณิตศาสตร์...", log: "[OK] Step 1 matching: Product Rule logic checked: Matches equation." },
+        { pct: 75, text: "ตรวจพิสูจน์การคำนวณทีละบรรทัดด้วยระบบ Symbolic Engine...", log: "[WARNING] Step 3 conflict: sin(pi) evaluated as 1. Expected: 0." },
+        { pct: 100, text: "เสร็จสิ้นการจัดอันดับและเขียนรายงาน...", log: "[DONE] Scoring complete: 8/10. Compiling final feedback nodes." }
+      ];
+
+      let currentStepIndex = 0;
+      
+      const interval = setInterval(() => {
+        if (currentStepIndex < steps.length) {
+          const step = steps[currentStepIndex];
+          progressText.innerText = step.text;
+          progressPct.innerText = step.pct + "%";
+          progressBar.style.width = step.pct + "%";
+          appendLog(logs, step.log);
+          currentStepIndex++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            loader.classList.add('hidden');
+            resultContainer.classList.remove('hidden');
+
+            // Deduct 5 credits for homework grading
+            deductCredits(5);
+          }, 800);
+        }
+      }, 1000);
+    }
+
+    function appendLog(logContainer, text) {
+      const p = document.createElement('p');
+      p.innerText = `> ${text}`;
+      logContainer.appendChild(p);
+      logContainer.scrollTop = logContainer.scrollHeight;
+    }
+
+    /**
+     * 6. WALLET MANAGEMENT & COST SHARING DEMO
+     */
+    function openSupportModal() {
+      const modal = document.getElementById('support-modal');
+      const content = document.getElementById('support-modal-content');
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        content.classList.remove('scale-95');
+        content.classList.add('scale-100');
+      }, 50);
+    }
+
+    // Modal close helper
+    function closeSupportModal() {
+      const modal = document.getElementById('support-modal');
+      const content = document.getElementById('support-modal-content');
+      content.classList.remove('scale-100');
+      content.classList.add('scale-95');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 200);
+    }
+
+    function addMockCredits(amount) {
+      if (currentStudent) {
+        currentStudent.balance += amount;
+        document.getElementById('credit-balance').innerText = currentStudent.balance;
+        alert(`สนับสนุนระบบสำเร็จ! เพิ่ม ${amount} เครดิตเข้าระบบเรียบร้อยแล้ว`);
+        closeSupportModal();
+      }
+    }
+
+    function deductCredits(amount) {
+      if (currentStudent) {
+        currentStudent.balance = Math.max(0, currentStudent.balance - amount);
+        document.getElementById('credit-balance').innerText = currentStudent.balance;
+      }
+    }
+
+    /**
+     * 7. INTERACTIVE MOCK CHAT
+     * Simulates bot interactions for testing purposes before SDK integration.
+     */
+    function sendMockMessage() {
+      const input = document.getElementById('mock-chat-input');
+      const messagesContainer = document.getElementById('mock-chat-messages');
+      const text = input.value.trim();
+      
+      if (!text) return;
+
+      // Deduct 1 credit for chat interaction
+      if (currentStudent && currentStudent.balance < 1) {
+        alert("คุณมีเครดิตไม่เพียงพอ กรุณาสนับสนุนค่าระบบเพื่อเติมเครดิต");
+        return;
+      }
+
+      // Add user message to display
+      const userBubble = document.createElement('div');
+      userBubble.className = "flex gap-2 justify-end";
+      userBubble.innerHTML = `
+        <div class="bg-emerald-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-slate-100 text-sm">
+          ${text}
+        </div>
+        <div class="w-8 h-8 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 text-xs font-bold font-mono">ST</div>
+      `;
+      messagesContainer.appendChild(userBubble);
+      input.value = '';
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      deductCredits(1);
+
+      // AI Typing simulated delay
+      const typingBubble = document.createElement('div');
+      typingBubble.className = "flex gap-2";
+      typingBubble.innerHTML = `
+        <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+        <div class="bg-slate-900 border border-white/5 p-3 rounded-xl rounded-tl-none text-slate-500 italic text-xs" id="typing-indicator">
+          ติวเตอร์กำลังพิมพ์คำอธิบาย...
+        </div>
+      `;
+      messagesContainer.appendChild(typingBubble);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+      setTimeout(() => {
+        // Remove typing bubble and add responses
+        typingBubble.remove();
+
+        const responseBubble = document.createElement('div');
+        responseBubble.className = "flex gap-2";
+
+        let reply = "ขออภัยครับ พอร์ทัลปัจจุบันกำลังทำงานในโหมดทดสอบแบบออฟไลน์ คุณสามารถอัปเดต SDK สคริปต์ของ Coze Chat เพื่อเชื่อมต่อห้องติวเตอร์ส่วนตัวได้ทันทีในซอร์สโค้ดของหน้า index.html";
+        
+        if (text.includes("กฎลูกโซ่") || text.toLowerCase().includes("chain rule")) {
+          reply = "<strong>กฎลูกโซ่ (Chain Rule)</strong> ใช้ในการหาอนุพันธ์ของฟังก์ชันประกอบ (Composite Function) ตัวอย่างเช่น หากต้องการหาอนุพันธ์ของ \( y = f(g(x)) \) สูตรคือ:<br><br>\[ \\frac{dy}{dx} = f'(g(x)) \\cdot g'(x) \]<br>หรือให้ \( u = g(x) \) จะได้ \( \\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx} \) นั่นเองครับ สงสัยจุดไหนเพิ่มเติมไหมครับ?";
+        } else if (text.includes("ดิฟ") || text.includes("อนุพันธ์")) {
+          reply = "สำหรับการหาอนุพันธ์ (Derivative) จำสูตรพื้นฐานที่สำคัญคือ:<br>1. \( \\frac{d}{dx}[x^n] = n x^{n-1} \)<br>2. \( \\frac{d}{dx}[e^x] = e^x \)<br>3. กฎการผลคูณ: \( (uv)' = uv' + vu' \)<br>มีโจทย์ข้อพิเศษชิ้นไหนให้ครูช่วยดูแลเป็นพิเศษไหมครับ?";
+        } else if (text.includes("อินทิเกรต") || text.includes("integrate")) {
+          reply = "การอินทิเกรต (Integration) คือการดำเนินการย้อนกลับของการหาอนุพันธ์ สูตรหลักที่เราใช้คือ:<br>\[ \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\] (เมื่อ \( n \\neq -1 \))<br><br>หากโจทย์มีความซับซ้อน อาจต้องใช้วิธีเปลี่ยนตัวแปร (Integration by Substitution) หรืออินทิเกรตทีละส่วน (Integration by Parts) ครับ";
+        }
+
+        responseBubble.innerHTML = `
+          <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 font-bold">AI</div>
+          <div class="bg-slate-900 border border-white/5 p-3.5 rounded-2xl rounded-tl-none max-w-[85%] text-slate-300">
+            <p class="font-bold text-emerald-400 mb-1"> Calculus Tutor Bot v1.5 </p>
+            ${reply}
+          </div>
+        `;
+        messagesContainer.appendChild(responseBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }, 1500);
+    }
+  </script>
+</body>
+</html>
